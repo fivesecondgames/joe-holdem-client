@@ -1,0 +1,38 @@
+#cards-player #card {
+    width: 69px;
+    height: 100px;
+    margin-right: -50px;
+}
+#cards-table #card {
+    width: 69px;
+    height: 100px;
+    margin-right: 4px;
+}
+#card {
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 0.2s;
+    transition-timing-function: ease-in-out;
+    display: inline-block;
+
+    position: relative;
+}
+
+.back {
+    transform: rotateY(180deg);
+}
+
+/* Stack front and back elements over each other */
+.front,
+.back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+}
+
+.container {
+    perspective: 400px;
+    position: relative;
+    z-index: 1;
+}
