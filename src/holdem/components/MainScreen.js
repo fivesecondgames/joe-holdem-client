@@ -22,10 +22,12 @@ class MainScreen extends Component {
                 </header>
                 <main>
                     <table>
-                        <tr>
-                            <td><GameList></GameList></td>
-                            <td><GameScreen></GameScreen></td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <td><GameList></GameList></td>
+                                <td><GameScreen></GameScreen></td>
+                            </tr>
+                        </tbody>
                     </table>
 
                 </main>

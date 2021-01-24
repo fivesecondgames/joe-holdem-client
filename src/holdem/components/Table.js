@@ -23,10 +23,14 @@ class Table extends Component {
         if (!game)
             return [];
 
-        for (var name in game.state.players) {
+        for (var i = 0; i < game.state.seats.length; i++) {
+
+            let name = game.state.seats[i];
+            if (!name)
+                continue;
             let player = game.state.players[name];
             playerList.push((
-                <Player name={player.name} data={player}></Player>
+                <Player name={player.name} seat={i} data={player}></Player>
             ))
         }
 
@@ -38,7 +42,7 @@ class Table extends Component {
         if (!game)
             return (<div></div>)
         return (
-            <div class="table">
+            <div className="table">
                 {game.rules.game.name} - {this.props.id}
                 <div>
                     <table>

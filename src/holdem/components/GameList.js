@@ -35,7 +35,7 @@ class GameList extends Component {
 
     async joinGame(id) {
         console.log("Joining game: " + id);
-        await holdem.joinGame(id, this.props.playername);
+        await holdem.joinGame(id, this.props.playername, Math.round(Math.random() * 9));
     }
 
     listGames() {

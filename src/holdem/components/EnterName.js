@@ -18,7 +18,7 @@ class EnterName extends Component {
                             minLength="3"
                             size="sm"
                             type="text"
-                            defaultValue={this.props.playername}
+                            //defaultValue={this.props.playername}
                             placeholder="Enter your display name"
                             value={this.props.playername}
                             onChange={(e) => {
@@ -41,11 +41,6 @@ class EnterName extends Component {
 
 let onCustomWatched = (ownProps) => {
     return ['playername'];
-}
-let onCustomProps = (key, value, store, ownProps) => {
-    return {
-        //value: value
-    }
 }
 
 export default flatstore.connect([], onCustomWatched, {})(EnterName);

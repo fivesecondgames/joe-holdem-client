@@ -49,7 +49,7 @@ class CreateGame extends Component {
             <div style={{ display: 'inline-block' }}>
                 <Button variant="primary" onClick={() => { this.setState({ show: true }) }}>Create Game</Button>
 
-                <Modal show={this.state.show} onHide={() => { this.setState({ show: false }); }}>
+                <Modal show={this.state.show} onHide={() => { this.setState({ show: false }); }} animation="false">
                     <Modal.Header closeButton>
                         <Modal.Title>Create Table</Modal.Title>
                     </Modal.Header>
@@ -57,140 +57,142 @@ class CreateGame extends Component {
                         <Form noValidate validated={true}>
                             <Form.Group controlId="formBasicEmail">
                                 <table width="100%">
-                                    <tr>
-                                        <td colSpan="2">
-                                            <Form.Label>Table Name</Form.Label>
-                                            <Form.Control
-                                                required
-                                                minLength="5"
-                                                size="sm"
-                                                type="text"
-                                                defaultValue={this.rules.game.name}
-                                                placeholder="Enter a name for this table"
-                                                onChange={(e) => {
-                                                    this.rules.game.name = e.target.value;
-                                                    console.log(e.target.value);
-                                                }} />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan="2">
-                                            <Form.Label>Seat Count</Form.Label>
-                                            <Form.Control
-                                                size="sm"
-                                                type="number"
-                                                readOnly
-                                                value={this.rules.game.seatCount} />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <Form.Label>Blind Count = <strong>{this.state.blindCount}</strong></Form.Label>
-                                            <Form.Control
-                                                required
-                                                size="sm"
-                                                type="range"
-                                                min="0"
-                                                max="3"
-                                                defaultValue="2"
-                                                onChange={(e) => {
-                                                    this.rules.game.blindCount = e.target.value;
-                                                    this.setState({ blindCount: e.target.value });
-                                                }} />
-                                        </td>
+                                    <tbody>
+                                        <tr>
+                                            <td colSpan="2">
+                                                <Form.Label>Table Name</Form.Label>
+                                                <Form.Control
+                                                    required
+                                                    minLength="5"
+                                                    size="sm"
+                                                    type="text"
+                                                    defaultValue={this.rules.game.name}
+                                                    placeholder="Enter a name for this table"
+                                                    onChange={(e) => {
+                                                        this.rules.game.name = e.target.value;
+                                                        console.log(e.target.value);
+                                                    }} />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="2">
+                                                <Form.Label>Seat Count</Form.Label>
+                                                <Form.Control
+                                                    size="sm"
+                                                    type="number"
+                                                    readOnly
+                                                    value={this.rules.game.seatCount} />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Form.Label>Blind Count = <strong>{this.state.blindCount}</strong></Form.Label>
+                                                <Form.Control
+                                                    required
+                                                    size="sm"
+                                                    type="range"
+                                                    min="0"
+                                                    max="3"
+                                                    defaultValue="2"
+                                                    onChange={(e) => {
+                                                        this.rules.game.blindCount = e.target.value;
+                                                        this.setState({ blindCount: e.target.value });
+                                                    }} />
+                                            </td>
 
-                                        <td>
-                                            <Form.Label>Blind Cost $</Form.Label>
-                                            <Form.Control
-                                                required
-                                                size="sm"
-                                                type="number"
-                                                min="0"
-                                                max="1000"
-                                                defaultValue={this.rules.game.blindCost}
-                                                placeholder="Enter blind cost"
-                                                onChange={(e) => {
-                                                    this.rules.game.blindCost = e.target.value;
-                                                    console.log(e.target.value);
-                                                }} />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <Form.Label>Ante $</Form.Label>
-                                            <Form.Control
-                                                required
-                                                size="sm"
-                                                type="number"
-                                                min="0"
-                                                max="1000"
-                                                defaultValue={this.rules.game.ante}
-                                                placeholder="Enter an ante cost $"
-                                                onChange={(e) => {
-                                                    this.rules.game.ante = e.target.value;
-                                                    console.log(e.target.value);
-                                                }} />
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <Form.Label>Min Bet $</Form.Label>
-                                            <Form.Control
-                                                required
-                                                size="sm"
-                                                type="number"
-                                                min="0"
-                                                max="1000"
-                                                defaultValue={this.rules.game.minBet}
-                                                placeholder="Enter an min bet $"
-                                                onChange={(e) => {
-                                                    this.rules.game.minBet = e.target.value;
-                                                    console.log(e.target.value);
-                                                }} />
-                                            <Form.Text className="text-muted">
-                                                &nbsp;
+                                            <td>
+                                                <Form.Label>Blind Cost $</Form.Label>
+                                                <Form.Control
+                                                    required
+                                                    size="sm"
+                                                    type="number"
+                                                    min="0"
+                                                    max="1000"
+                                                    defaultValue={this.rules.game.blindCost}
+                                                    placeholder="Enter blind cost"
+                                                    onChange={(e) => {
+                                                        this.rules.game.blindCost = e.target.value;
+                                                        console.log(e.target.value);
+                                                    }} />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Form.Label>Ante $</Form.Label>
+                                                <Form.Control
+                                                    required
+                                                    size="sm"
+                                                    type="number"
+                                                    min="0"
+                                                    max="1000"
+                                                    defaultValue={this.rules.game.ante}
+                                                    placeholder="Enter an ante cost $"
+                                                    onChange={(e) => {
+                                                        this.rules.game.ante = e.target.value;
+                                                        console.log(e.target.value);
+                                                    }} />
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Form.Label>Min Bet $</Form.Label>
+                                                <Form.Control
+                                                    required
+                                                    size="sm"
+                                                    type="number"
+                                                    min="0"
+                                                    max="1000"
+                                                    defaultValue={this.rules.game.minBet}
+                                                    placeholder="Enter an min bet $"
+                                                    onChange={(e) => {
+                                                        this.rules.game.minBet = e.target.value;
+                                                        console.log(e.target.value);
+                                                    }} />
+                                                <Form.Text className="text-muted">
+                                                    &nbsp;
                                             </Form.Text>
-                                        </td>
-                                        <td>
-                                            <Form.Label>Max Bet $</Form.Label>
-                                            <Form.Control
-                                                required
-                                                size="sm"
-                                                type="number"
-                                                min="0"
-                                                max="10000"
-                                                defaultValue={this.rules.game.maxBet}
-                                                placeholder="Enter an max bet $"
-                                                onChange={(e) => {
-                                                    this.rules.game.maxBet = e.target.value;
-                                                    console.log(e.target.value);
-                                                }} />
-                                            <Form.Text className="text-muted">
-                                                0 for unlimited
+                                            </td>
+                                            <td>
+                                                <Form.Label>Max Bet $</Form.Label>
+                                                <Form.Control
+                                                    required
+                                                    size="sm"
+                                                    type="number"
+                                                    min="0"
+                                                    max="10000"
+                                                    defaultValue={this.rules.game.maxBet}
+                                                    placeholder="Enter an max bet $"
+                                                    onChange={(e) => {
+                                                        this.rules.game.maxBet = e.target.value;
+                                                        console.log(e.target.value);
+                                                    }} />
+                                                <Form.Text className="text-muted">
+                                                    0 for unlimited
                                             </Form.Text>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan="2">
-                                            <Form.Label>Max Raises</Form.Label>
-                                            <Form.Control
-                                                required
-                                                size="sm"
-                                                type="number"
-                                                min="-1"
-                                                max="10"
-                                                defaultValue={this.rules.game.maxRaises}
-                                                placeholder="Enter an max raises count"
-                                                onChange={(e) => {
-                                                    this.rules.game.maxRaises = e.target.value;
-                                                    console.log(e.target.value);
-                                                }} />
-                                            <Form.Text className="text-muted">
-                                                -1 = 1 raise for each player<br />0 = no limit<br />1 to 10 = set a raise count
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="2">
+                                                <Form.Label>Max Raises</Form.Label>
+                                                <Form.Control
+                                                    required
+                                                    size="sm"
+                                                    type="number"
+                                                    min="-1"
+                                                    max="10"
+                                                    defaultValue={this.rules.game.maxRaises}
+                                                    placeholder="Enter an max raises count"
+                                                    onChange={(e) => {
+                                                        this.rules.game.maxRaises = e.target.value;
+                                                        console.log(e.target.value);
+                                                    }} />
+                                                <Form.Text className="text-muted">
+                                                    -1 = 1 raise for each player<br />0 = no limit<br />1 to 10 = set a raise count
                                                 </Form.Text>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                    </tbody>
                                 </table>
 
                             </Form.Group>

@@ -13,11 +13,11 @@ class Player extends Component {
         let player = this.props.data;
 
         return (
-            <div class="player">
+            <div className="player">
                 {this.showActiveMarker()}
-                <span style={{ display: 'inline-block', width: '10rem', marginRight: '1rem' }}>#{player.seat + 1} {player.displayname}</span>
+                <span style={{ display: 'inline-block', width: '10rem', marginRight: '1rem' }}>#{this.props.seat + 1} {player.displayname}</span>
                 <span>${player.chips}</span>
-                <ReadyAction playerid={player.playerid}></ReadyAction>
+                <ReadyAction playerid={player.name}></ReadyAction>
             </div>
         );
     }

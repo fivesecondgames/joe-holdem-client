@@ -14,11 +14,37 @@ class Holdem {
         this.credentials = credentials || defaultCredentials;
         this.gameList = {};
         this.games = {};
-        this.me = {};
+        this.me = { ready: false };
+
+        this.PLAYER_INACTIVE = 0;
+        this.PLAYER_FOLDED = 1;
+        this.PLAYER_ALLIN = 2;
+        this.PLAYER_ACTIVE = 3;
+        this.PLAYER_DISCONNECTED = 4;
+
+        this.PHASE_NONE = -1;
+        this.PHASE_PREFLOP = 0;
+        this.PHASE_FLOP = 1;
+        this.PHASE_TURN = 2;
+        this.PHASE_RIVER = 3;
+        this.PHASE_SHOWDOWN = 4;
     }
 
     getMe() {
         return this.me;
+    }
+
+    getGame(gameid) {
+        gameid = gameid || this.me.gameid;
+        let games = storage.get('games', {});
+        let game = games[gameid];
+        return game;
+    }
+
+    getPlayers(gameid) {
+        let game = this.getGame(gameid);
+        let players = game.state.players;
+        return players;
     }
 
     async requestAPIKey() {
@@ -66,10 +92,11 @@ class Holdem {
         return null;
     }
 
-    async joinGame(id, displayname) {
+    async joinGame(id, displayname, seatid) {
         try {
             this.me.gameid = id;
             this.me.displayname = displayname;
+            this.me.seatid = seatid;
 
             this.socket = this.connect();
             this.socket.on("connected", this.onConnected.bind(this));
@@ -81,48 +108,6 @@ class Holdem {
         catch (e) {
             console.error(e);
         }
-    }
-
-    onEvent(event) {
-        this.updateChanges(event.game);
-    }
-
-    onJoinGame(game) {
-        this.updateGame(game);
-    }
-
-    updateChanges(changes) {
-        let games = storage.get('games', {});
-        let game = games[changes.id];
-        games[changes.id] = this.merge(changes, game);
-        storage.set('games', games);
-        storage.set(game.id, game);
-        console.log(game);
-    }
-
-    updateGame(game) {
-        let games = storage.get('games', {});
-        games[game.id] = game;
-        storage.set('games', games);
-        storage.set(game.id, game);
-        console.log(game);
-    }
-    invalidAuth(data) {
-        //attempt to authenticate again
-        this.authenticate(data);
-    }
-
-    //login player and then submit their token/api key, change here as needed
-    authenticate(data) {
-        this.socket.emit('authenticate', { 'X-API-KEY': this.me.apikey });
-    }
-
-    //user is authenticated, lets join the table!
-    onAuthenticated(data) {
-        console.log(data);
-        this.me.playerid = data.playerid;
-
-        this.socket.emit('playerjoin', this.me)
     }
 
     //initiate a new connection, or give us the existing connection
@@ -143,6 +128,74 @@ class Holdem {
         console.log(data);
         this.authenticate(data);
     }
+
+    //login player and then submit their token/api key, change here as needed
+    authenticate(data) {
+        this.socket.emit('authenticate', { 'X-API-KEY': this.me.apikey });
+    }
+
+    //user is authenticated, lets join the table!
+    onAuthenticated(data) {
+        console.log(data);
+        this.me.playerid = data.playerid;
+
+        this.socket.emit('playerjoin', this.me)
+    }
+
+
+    onEvent(event) {
+        console.log("EVENT:" + event.event, event.game);
+        this.updateChanges(event.game);
+    }
+
+    onJoinGame(game) {
+        this.updateGame(game);
+    }
+
+    ready() {
+        this.me.ready = !this.me.ready;
+        this.socket.emit('ready', { gameid: this.me.gameid, ready: this.me.ready })
+    }
+
+    updateChanges(changes) {
+        let games = storage.get('games', {});
+        let game = games[changes.id];
+        if (!game)
+            return;
+
+        if ('_delete' in changes) {
+            let playerid = changes._delete;
+            for (var i = 0; i < game.state.seats.length; i++) {
+                let seat = game.state.seats[i];
+                if (seat != playerid)
+                    continue;
+                game.state.seats[i] = false;
+            }
+            // let playerid = game.state.seats[changes._delete];
+            // game.state.seats[seatid] = false;
+            delete game.state.players[playerid];
+        }
+
+        games[changes.id] = this.merge(changes, game);
+        storage.set('games', games);
+        storage.set(game.id, game);
+        console.log(game);
+    }
+
+    updateGame(game) {
+        let games = storage.get('games', {});
+        games[game.id] = game;
+        storage.set('games', games);
+        storage.set(game.id, game);
+        console.log(game);
+    }
+    invalidAuth(data) {
+        //attempt to authenticate again
+        this.authenticate(data);
+    }
+
+
+
 
     async httpGet(action) {
         try {
