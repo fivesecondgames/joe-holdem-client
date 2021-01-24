@@ -1,14 +1,14 @@
-#cards-player #card {
+.cards-player .card {
     width: 69px;
     height: 100px;
     margin-right: -50px;
 }
-#cards-table #card {
+.cards-table .card {
     width: 69px;
     height: 100px;
     margin-right: 4px;
 }
-#card {
+.card {
     transform-style: preserve-3d;
     will-change: transform;
     transition: transform 0.2s;

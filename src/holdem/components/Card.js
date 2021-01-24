@@ -17,7 +17,7 @@ class Card extends Component {
         const { index, card, size, down, rotationY } = this.props;
 
         return (
-            <div id="card" style={{ transform: `rotateY(${rotationY}deg)` }}>
+            <div class="card" style={{ transform: `rotateY(${rotationY}deg)` }}>
                 <img
                     className={down === true ? "front" : "back"}
                     src={"cards/back.png"}

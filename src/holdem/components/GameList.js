@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button'
 import flatstore from 'flatstore';
 import Card from './Card';
 import CreateGame from './CreateGame';
-import Form from 'react-bootstrap/Form'
+
 
 import storage from '../service/storage';
 import holdem from '../service/holdem';
@@ -17,40 +17,57 @@ class GameList extends Component {
         flatstore.set('playername', storage.load('playername', ''));
         flatstore.set('playerchips', '');
 
-        this.gameList = {};
         this.state = {
-            gameListElems: []
+            gameList: []
         }
-        this.listGames();
+
+
     }
 
-    async listGames() {
+    componentDidMount() {
+        this.updateGameList();
+    }
+
+    async updateGameList() {
         this.gameList = await holdem.listGames();
+        flatstore.set('gameList', this.gameList);
+    }
+
+    async joinGame(id) {
+        console.log("Joining game: " + id);
+        await holdem.joinGame(id, this.props.playername);
+    }
+
+    listGames() {
+
         let gameListElems = [];
-        for (const [id, game] of Object.entries(this.gameList)) {
+        let joinDisabled = !(typeof this.props.playername === 'string' && this.props.playername.length >= 3);
+        for (const [id, game] of Object.entries(this.props.gameList || {})) {
             gameListElems.push((
-                <li style={{ borderBottom: '1px solid #777', width: '300px', padding: '0.625rem' }}>
+                <li key={id} style={{ borderBottom: '1px solid #777', width: '300px', padding: '0.625rem' }}>
                     <span style={{ display: 'inline-block', width: '200px', fontWeight: 'bold' }}>{game.rules.game.name}</span>
-                    <Button style={{ marginLeft: '5px' }} variant="primary" size="sm">
+                    <Button
+                        disabled={joinDisabled}
+                        style={{ marginLeft: '5px' }}
+                        variant="info"
+                        size="sm"
+                        onClick={() => this.joinGame(id)}>
                         Join
                     </Button>
                 </li>))
         }
-        this.setState({ gameListElems });
+
+        return gameListElems;
     }
 
     render() {
 
         return (
             <div>
-
                 <EnterName></EnterName>
-
-
-
-                <h3>Join Game</h3>
+                <h3>Join Game or <CreateGame /></h3>
                 <ul>
-                    {this.state.gameListElems}
+                    {this.listGames()}
                 </ul>
                 {/* <div id="cards-player">
                     <Card card={'AH'} down={true}></Card>
@@ -60,7 +77,7 @@ class GameList extends Component {
                 </div> */}
                 <br />
                 <br />
-                <CreateGame />
+
             </div >
         )
     }
@@ -68,7 +85,7 @@ class GameList extends Component {
 
 
 let onCustomWatched = (ownProps) => {
-    return [];
+    return ['playername', 'gameList'];
 }
 let onCustomProps = (key, value, store, ownProps) => {
     return {

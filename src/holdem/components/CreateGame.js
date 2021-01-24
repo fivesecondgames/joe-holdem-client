@@ -38,12 +38,15 @@ class CreateGame extends Component {
     async CreateGame() {
         await holdem.createGame({ rules: this.rules });
         this.setState({ show: false });
+
+        this.gameList = await holdem.listGames();
+        flatstore.set('gameList', this.gameList);
     }
 
     render() {
 
         return (
-            <div>
+            <div style={{ display: 'inline-block' }}>
                 <Button variant="primary" onClick={() => { this.setState({ show: true }) }}>Create Game</Button>
 
                 <Modal show={this.state.show} onHide={() => { this.setState({ show: false }); }}>
@@ -51,13 +54,15 @@ class CreateGame extends Component {
                         <Modal.Title>Create Table</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form validated={true}>
+                        <Form noValidate validated={true}>
                             <Form.Group controlId="formBasicEmail">
                                 <table width="100%">
                                     <tr>
                                         <td colSpan="2">
                                             <Form.Label>Table Name</Form.Label>
                                             <Form.Control
+                                                required
+                                                minLength="5"
                                                 size="sm"
                                                 type="text"
                                                 defaultValue={this.rules.game.name}
@@ -70,7 +75,7 @@ class CreateGame extends Component {
                                     </tr>
                                     <tr>
                                         <td colSpan="2">
-                                            <Form.Label>Seat Count Name</Form.Label>
+                                            <Form.Label>Seat Count</Form.Label>
                                             <Form.Control
                                                 size="sm"
                                                 type="number"
@@ -82,6 +87,7 @@ class CreateGame extends Component {
                                         <td>
                                             <Form.Label>Blind Count = <strong>{this.state.blindCount}</strong></Form.Label>
                                             <Form.Control
+                                                required
                                                 size="sm"
                                                 type="range"
                                                 min="0"
@@ -96,8 +102,11 @@ class CreateGame extends Component {
                                         <td>
                                             <Form.Label>Blind Cost $</Form.Label>
                                             <Form.Control
+                                                required
                                                 size="sm"
                                                 type="number"
+                                                min="0"
+                                                max="1000"
                                                 defaultValue={this.rules.game.blindCost}
                                                 placeholder="Enter blind cost"
                                                 onChange={(e) => {
@@ -110,8 +119,11 @@ class CreateGame extends Component {
                                         <td>
                                             <Form.Label>Ante $</Form.Label>
                                             <Form.Control
+                                                required
                                                 size="sm"
                                                 type="number"
+                                                min="0"
+                                                max="1000"
                                                 defaultValue={this.rules.game.ante}
                                                 placeholder="Enter an ante cost $"
                                                 onChange={(e) => {
@@ -125,6 +137,7 @@ class CreateGame extends Component {
                                         <td>
                                             <Form.Label>Min Bet $</Form.Label>
                                             <Form.Control
+                                                required
                                                 size="sm"
                                                 type="number"
                                                 min="0"
@@ -142,6 +155,7 @@ class CreateGame extends Component {
                                         <td>
                                             <Form.Label>Max Bet $</Form.Label>
                                             <Form.Control
+                                                required
                                                 size="sm"
                                                 type="number"
                                                 min="0"
@@ -161,6 +175,7 @@ class CreateGame extends Component {
                                         <td colSpan="2">
                                             <Form.Label>Max Raises</Form.Label>
                                             <Form.Control
+                                                required
                                                 size="sm"
                                                 type="number"
                                                 min="-1"
@@ -199,7 +214,7 @@ let onCustomWatched = (ownProps) => {
 }
 let onCustomProps = (key, value, store, ownProps) => {
     return {
-        value: value
+        [key]: value
     }
 }
 

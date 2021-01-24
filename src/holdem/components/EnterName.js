@@ -10,16 +10,22 @@ class EnterName extends Component {
 
         return (
             <div style={{ width: '300px' }}>
-                <Form>
+                <Form noValidate validated={true}>
                     <Form.Group controlId="PlayerName">
                         <Form.Label>Choose a Name {this.props.playername}</Form.Label>
                         <Form.Control
+                            required
+                            minLength="3"
                             size="sm"
                             type="text"
                             defaultValue={this.props.playername}
                             placeholder="Enter your display name"
+                            value={this.props.playername}
                             onChange={(e) => {
-                                storage.set('playername', e.target.value);
+                                let name = e.target.value;
+                                name = name.replace(/([^a-z0-9]+)/ig, "")
+                                storage.set('playername', name);
+
                                 //this.game.name = e.target.value;
                                 console.log(e.target.value);
                             }} />

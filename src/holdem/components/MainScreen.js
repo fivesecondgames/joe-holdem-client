@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 
 import flatstore from 'flatstore';
 import GameList from './GameList';
+import GameScreen from './GameScreen';
+import holdem from '../service/holdem';
 
 class MainScreen extends Component {
 
     constructor(props) {
         super(props);
 
-
+        holdem.requestAPIKey();
     }
 
     render() {
@@ -19,7 +21,13 @@ class MainScreen extends Component {
                     <h2>Welcome to Joe's Holdem</h2>
                 </header>
                 <main>
-                    <GameList></GameList>
+                    <table>
+                        <tr>
+                            <td><GameList></GameList></td>
+                            <td><GameScreen></GameScreen></td>
+                        </tr>
+                    </table>
+
                 </main>
             </div>
         )
@@ -27,13 +35,4 @@ class MainScreen extends Component {
 }
 
 
-let onCustomWatched = (ownProps) => {
-    return [];
-}
-let onCustomProps = (key, value, store, ownProps) => {
-    return {
-        value: value
-    }
-}
-
-export default flatstore.connect([], onCustomWatched, onCustomProps)(MainScreen);
+export default MainScreen;
