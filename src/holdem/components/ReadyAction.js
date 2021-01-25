@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import './Card.css';
+import constants from '../service/constants';
 import holdem from '../service/holdem';
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -17,7 +18,7 @@ class ReadyAction extends Component {
         let player = players[playerid];
         let game = holdem.getGame(local.gameid);
 
-        if (!player || game.state.phase > holdem.PHASE_NONE) {
+        if (!player || game.state.phase > constants.PHASE_NONE) {
             return <React.Fragment />
         }
         if (isLocal) {

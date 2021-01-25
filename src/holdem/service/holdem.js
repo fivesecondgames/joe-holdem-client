@@ -15,19 +15,6 @@ class Holdem {
         this.gameList = {};
         this.games = {};
         this.me = { ready: false };
-
-        this.PLAYER_INACTIVE = 0;
-        this.PLAYER_FOLDED = 1;
-        this.PLAYER_ALLIN = 2;
-        this.PLAYER_ACTIVE = 3;
-        this.PLAYER_DISCONNECTED = 4;
-
-        this.PHASE_NONE = -1;
-        this.PHASE_PREFLOP = 0;
-        this.PHASE_FLOP = 1;
-        this.PHASE_TURN = 2;
-        this.PHASE_RIVER = 3;
-        this.PHASE_SHOWDOWN = 4;
     }
 
     getMe() {
@@ -157,6 +144,23 @@ class Holdem {
         this.socket.emit('ready', { gameid: this.me.gameid, ready: this.me.ready })
     }
 
+    call() {
+        this.socket.emit('action', { action: 'call' });
+    }
+    raise(payload) {
+        this.socket.emit('action', { action: 'raise', payload });
+    }
+    check() {
+        this.socket.emit('action', { action: 'check' });
+    }
+    allin() {
+        this.socket.emit('action', { action: 'allin' });
+    }
+    fold() {
+        this.socket.emit('action', { action: 'fold' });
+    }
+
+
     updateChanges(changes) {
         let games = storage.get('games', {});
         let game = games[changes.id];
@@ -227,6 +231,10 @@ class Holdem {
 
         for (var key in from) {
 
+            if (!this.isObject(to)) {
+                to = from;
+                break;
+            }
             if (!(key in to)) {
                 to[key] = from[key];
                 continue;
